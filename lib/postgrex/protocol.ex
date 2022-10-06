@@ -3304,7 +3304,6 @@ defmodule Postgrex.Protocol do
   defp maybe_encode_msg(msg) when is_binary(msg) or is_list(msg), do: msg
 
   defp do_send(%{sock: {mod, sock}} = s, data, buffer) do
-  Logger.info("[Postgrex.Protocol] (#{inspect(self())}) do_send/3 - mod: #{inspect(mod)}, sock: #{inspect(sock)}, data: #{inspect(data)}")
     case mod.send(sock, data) do
       :ok ->
         :ok
@@ -3360,6 +3359,7 @@ defmodule Postgrex.Protocol do
   end
 
   defp conn_error(:ssl, action, reason) do
+    Logger.info("[Postgrex.Protocol] (#{inspect(self())}) conn_error(:ssl, _, _) - action: #{inspect(action)}, reason: #{inspect(reason)}")
     formatted_reason = :ssl.format_error(reason)
     conn_error("ssl #{action}: #{formatted_reason} - #{inspect(reason)}")
   end
