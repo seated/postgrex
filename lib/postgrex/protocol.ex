@@ -199,7 +199,9 @@ defmodule Postgrex.Protocol do
   end
 
   defp connect_and_handshake(host, port, sock_opts, timeout, s, status) do
-    Logger.info("[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6")
+    Logger.info(
+      "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - timeout: #{timeout}"
+    )
 
     case connect(host, port, sock_opts, timeout, s) do
       {:ok, s} ->
