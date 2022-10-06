@@ -3310,6 +3310,9 @@ defmodule Postgrex.Protocol do
         :ok
 
       {:error, reason} ->
+           Logger.info(
+      "[Postgrex.Protocol] (#{inspect(self())}) do_send/3 {:error, reason} case - s: #{inspect(s)}, data: #{inspect(data)}, reason: #{inspect(reason)}"
+    )
         disconnect(s, tag(mod), "send", reason, buffer)
     end
   end
