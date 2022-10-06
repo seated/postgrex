@@ -759,6 +759,7 @@ defmodule Postgrex.Protocol do
   end
 
   defp ssl_recv(%{sock: {:gen_tcp, sock}} = s, status) do
+    Logger.info("[Postgrex.Protocol] (#{inspect(self())}) ssl_recv/2 - status: #{inspect(status)} - before :gen_tcp.recv")
     case :gen_tcp.recv(sock, 1, :infinity) do
       {:ok, <<?S>>} ->
         ssl_connect(s, status)
@@ -3342,6 +3343,7 @@ defmodule Postgrex.Protocol do
   end
 
   defp disconnect(s, tag, action, reason, buffer) do
+   Logger.info("[Postgrex.Protocol] (#{inspect(self())}) disconnect/5 - action: #{inspect(action)}, reason: #{inspect(reason)}")
     disconnect(%{s | buffer: buffer}, tag, action, reason)
   end
 
