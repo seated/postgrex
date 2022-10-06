@@ -3286,11 +3286,17 @@ defmodule Postgrex.Protocol do
   end
 
   defp msg_send(s, msgs, buffer) when is_list(msgs) do
+       Logger.info(
+      "[Postgrex.Protocol] (#{inspect(self())}) msg_send/3 msgs is list - s: #{inspect(s)}, msgs: #{inspect(msgs)}, buffer: #{inspect(buffer)}"
+    )
     binaries = Enum.reduce(msgs, [], &[&2 | maybe_encode_msg(&1)])
     do_send(s, binaries, buffer)
   end
 
   defp msg_send(s, msg, buffer) do
+   Logger.info(
+      "[Postgrex.Protocol] (#{inspect(self())}) msg_send/3 msg - s: #{inspect(s)}, msg: #{inspect(msg)}, buffer: #{inspect(buffer)}"
+    )
     do_send(s, encode_msg(msg), buffer)
   end
 
@@ -3298,6 +3304,7 @@ defmodule Postgrex.Protocol do
   defp maybe_encode_msg(msg) when is_binary(msg) or is_list(msg), do: msg
 
   defp do_send(%{sock: {mod, sock}} = s, data, buffer) do
+  Logger.info("[Postgrex.Protocol] (#{inspect(self())}) do_send/3 - mod: #{inspect(mod)}, sock: #{inspect(sock)}, data: #{inspect(data)}")
     case mod.send(sock, data) do
       :ok ->
         :ok
