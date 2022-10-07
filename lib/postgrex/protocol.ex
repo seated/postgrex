@@ -66,7 +66,8 @@ defmodule Postgrex.Protocol do
           {:ok, state}
           | {:error, Postgrex.Error.t() | %DBConnection.ConnectionError{}}
   def connect(opts) do
-    if System.get_env("STONE_DATABASE_POOL_URL") do
+    Logger.info("[Postgrex Protocol] CONNECT ONE #{inspect(opts[:pool_index])}")
+    if System.get_env("STONE_DATABASE_POOL_URL") and opts[:pool_index] > 200 do
       # Sleep the process for a random amount of time to prevent the entire connection
       # pool attempting to connect to the server all at once.
       sleep_for = Enum.random(0..30_000)
