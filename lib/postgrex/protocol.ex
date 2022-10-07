@@ -69,7 +69,7 @@ defmodule Postgrex.Protocol do
     if System.get_env("STONE_DATABASE_POOL_URL") do
       # Sleep the process for a random amount of time to prevent the entire connection
       # pool attempting to connect to the server all at once.
-      sleep_for = Enum.random(1000..30_000)
+      sleep_for = Enum.random(0..30_000)
 
       Process.sleep(sleep_for)
     end
