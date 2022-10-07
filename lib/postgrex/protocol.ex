@@ -206,9 +206,9 @@ defmodule Postgrex.Protocol do
   end
 
   defp connect_and_handshake(host, port, sock_opts, timeout, s, status) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - timeout: #{timeout}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - timeout: #{timeout}"
+    # )
 
     case connect(host, port, sock_opts, timeout, s) do
       {:ok, s} ->
@@ -230,7 +230,7 @@ defmodule Postgrex.Protocol do
   @impl true
   @spec disconnect(Exception.t(), state) :: :ok
   def disconnect(_, s) do
-    Logger.info("[Postgrex.Protocol] (#{inspect(self())}) disconnect/2 - s: #{inspect(s)}")
+    # Logger.info("[Postgrex.Protocol] (#{inspect(self())}) disconnect/2 - s: #{inspect(s)}")
 
     # cancel the request first otherwise PostgreSQL will log
     # every time the connection is explicitly disconnected
@@ -651,9 +651,9 @@ defmodule Postgrex.Protocol do
   defp connect(host, port, sock_opts, timeout, s) do
     buffer? = Keyword.has_key?(sock_opts, :buffer)
 
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) connect/5 - Start, timeout: #{timeout}, host: #{host}, port: #{port}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) connect/5 - Start, timeout: #{timeout}, host: #{host}, port: #{port}"
+    # )
 
     case :gen_tcp.connect(host, port, sock_opts ++ @sock_opts, timeout) do
       {:ok, sock} when buffer? ->
@@ -694,9 +694,9 @@ defmodule Postgrex.Protocol do
     %{opts: opts} = status
     handshake_timeout = Keyword.get(opts, :handshake_timeout, timeout)
 
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) handshake/2 - handshake_timeout: #{handshake_timeout}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) handshake/2 - handshake_timeout: #{handshake_timeout}"
+    # )
 
     timer = start_handshake_timer(handshake_timeout, sock)
 
@@ -727,9 +727,9 @@ defmodule Postgrex.Protocol do
 
   @doc false
   def handshake_shutdown(timeout, pid, sock) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) handshake_shutdown/3 - timeout: #{timeout}, pid: #{inspect(pid)}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) handshake_shutdown/3 - timeout: #{timeout}, pid: #{inspect(pid)}"
+    # )
 
     if Process.alive?(pid) do
       Logger.error(fn ->
@@ -766,9 +766,9 @@ defmodule Postgrex.Protocol do
   end
 
   defp ssl_recv(%{sock: {:gen_tcp, sock}} = s, status) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) ssl_recv/2 - status: #{inspect(status)} - before :gen_tcp.recv"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) ssl_recv/2 - status: #{inspect(status)} - before :gen_tcp.recv"
+    # )
 
     case :gen_tcp.recv(sock, 1, :infinity) do
       {:ok, <<?S>>} ->
@@ -3359,9 +3359,9 @@ defmodule Postgrex.Protocol do
   end
 
   defp disconnect(s, tag, action, reason, buffer) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) disconnect/5 - action: #{inspect(action)}, reason: #{inspect(reason)}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) disconnect/5 - action: #{inspect(action)}, reason: #{inspect(reason)}"
+    # )
 
     disconnect(%{s | buffer: buffer}, tag, action, reason)
   end
@@ -3503,13 +3503,13 @@ defmodule Postgrex.Protocol do
   defp cancel_request(s) do
     case do_cancel_request(s) do
       :ok ->
-        Logger.info("[Postgrex.Protocol] (#{inspect(self())}) cancel_request/1 - :ok")
+        # Logger.info("[Postgrex.Protocol] (#{inspect(self())}) cancel_request/1 - :ok")
         :ok
 
       {:error, action, reason} ->
-        Logger.info(
-          "[Postgrex.Protocol] (#{inspect(self())}) cancel_request/1 - :error, action: #{inspect(action)}, reason: #{inspect(reason)}"
-        )
+        # Logger.info(
+        #   "[Postgrex.Protocol] (#{inspect(self())}) cancel_request/1 - :error, action: #{inspect(action)}, reason: #{inspect(reason)}"
+        # )
 
         err = conn_error(:tcp, action, reason)
 
