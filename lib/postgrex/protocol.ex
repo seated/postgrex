@@ -106,9 +106,9 @@ defmodule Postgrex.Protocol do
 
     connect_timeout = Keyword.get(opts, :connect_timeout, timeout)
 
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) Connect/1 - timeout: #{timeout}, ping_timeout: #{ping_timeout}, connect_timeout: #{connect_timeout}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) Connect/1 - timeout: #{timeout}, ping_timeout: #{ping_timeout}, connect_timeout: #{connect_timeout}"
+    # )
 
     status = %{
       opts: opts,
@@ -212,16 +212,16 @@ defmodule Postgrex.Protocol do
 
     case connect(host, port, sock_opts, timeout, s) do
       {:ok, s} ->
-        Logger.info(
-          "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - :ok, s: #{inspect(s)}, host: #{host}, port: #{port}"
-        )
+        # Logger.info(
+        #   "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - :ok, s: #{inspect(s)}, host: #{host}, port: #{port}"
+        # )
 
         handshake(s, status)
 
       {:error, _} = error ->
-        Logger.info(
-          "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - error: #{inspect(error)}"
-        )
+        # Logger.info(
+        #   "[Postgrex.Protocol] (#{inspect(self())}) connect_and_handshake/6 - error: #{inspect(error)}"
+        # )
 
         error
     end
@@ -659,10 +659,10 @@ defmodule Postgrex.Protocol do
       {:ok, sock} when buffer? ->
         {:ok, %{s | sock: {:gen_tcp, sock}}}
 
-        Logger.info("[Postgrex.Protocol] (#{inspect(self())}) connect/5 - :ok")
+      # Logger.info("[Postgrex.Protocol] (#{inspect(self())}) connect/5 - :ok")
 
       {:ok, sock} ->
-        Logger.info("[Postgrex.Protocol] (#{inspect(self())}) connect/5 - :ok")
+        # Logger.info("[Postgrex.Protocol] (#{inspect(self())}) connect/5 - :ok")
         # A suitable :buffer is only set if :recbuf is included in
         # :socket_options.
         {:ok, [sndbuf: sndbuf, recbuf: recbuf, buffer: buffer]} =
@@ -673,9 +673,9 @@ defmodule Postgrex.Protocol do
         {:ok, %{s | sock: {:gen_tcp, sock}}}
 
       {:error, reason} ->
-        Logger.info(
-          "[Postgrex.Protocol] (#{inspect(self())}) connect/5 - :error, reason: #{inspect(reason)}"
-        )
+        # Logger.info(
+        #   "[Postgrex.Protocol] (#{inspect(self())}) connect/5 - :error, reason: #{inspect(reason)}"
+        # )
 
         case host do
           {:local, socket_addr} ->
@@ -707,9 +707,9 @@ defmodule Postgrex.Protocol do
         {:ok, %{s | parameters: ref}}
 
       {:disconnect, err, s} ->
-        Logger.info(
-          "[Postgrex.Protocol] (#{inspect(self())}) handshake/2 - disconnect error: #{inspect(err)}, s: #{inspect(s)}"
-        )
+        # Logger.info(
+        #   "[Postgrex.Protocol] (#{inspect(self())}) handshake/2 - disconnect error: #{inspect(err)}, s: #{inspect(s)}"
+        # )
 
         cancel_handshake_timer(timer)
         disconnect(err, s)
@@ -3297,18 +3297,18 @@ defmodule Postgrex.Protocol do
   end
 
   defp msg_send(s, msgs, buffer) when is_list(msgs) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) msg_send/3 msgs is list - s: #{inspect(s)}, msgs: #{inspect(msgs)}, buffer: #{inspect(buffer)}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) msg_send/3 msgs is list - s: #{inspect(s)}, msgs: #{inspect(msgs)}, buffer: #{inspect(buffer)}"
+    # )
 
     binaries = Enum.reduce(msgs, [], &[&2 | maybe_encode_msg(&1)])
     do_send(s, binaries, buffer)
   end
 
   defp msg_send(s, msg, buffer) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) msg_send/3 msg - s: #{inspect(s)}, msg: #{inspect(msg)}, buffer: #{inspect(buffer)}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) msg_send/3 msg - s: #{inspect(s)}, msg: #{inspect(msg)}, buffer: #{inspect(buffer)}"
+    # )
 
     do_send(s, encode_msg(msg), buffer)
   end
@@ -3322,9 +3322,9 @@ defmodule Postgrex.Protocol do
         :ok
 
       {:error, reason} ->
-        Logger.info(
-          "[Postgrex.Protocol] (#{inspect(self())}) do_send/3 {:error, reason} case - s: #{inspect(s)}, data: #{inspect(data)}, reason: #{inspect(reason)}"
-        )
+        # Logger.info(
+        #   "[Postgrex.Protocol] (#{inspect(self())}) do_send/3 {:error, reason} case - s: #{inspect(s)}, data: #{inspect(data)}, reason: #{inspect(reason)}"
+        # )
 
         disconnect(s, tag(mod), "send", reason, buffer)
     end
@@ -3380,9 +3380,9 @@ defmodule Postgrex.Protocol do
   end
 
   defp conn_error(:ssl, action, reason) do
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) conn_error(:ssl, _, _) - action: #{inspect(action)}, reason: #{inspect(reason)}"
-    )
+    # Logger.info(
+    #   "[Postgrex.Protocol] (#{inspect(self())}) conn_error(:ssl, _, _) - action: #{inspect(action)}, reason: #{inspect(reason)}"
+    # )
 
     formatted_reason = :ssl.format_error(reason)
     conn_error("ssl #{action}: #{formatted_reason} - #{inspect(reason)}")
