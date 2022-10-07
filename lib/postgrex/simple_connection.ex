@@ -209,8 +209,8 @@ defmodule Postgrex.SimpleConnection do
   Wrapper for `GenServer.call/3`.
   """
   def call(server, message, timeout \\ 5000) do
-    with {__MODULE__, reason} <- GenServer.call(server, message, timeout) do
-      exit({reason, {__MODULE__, :call, [server, message, timeout]}})
+    with {__MODULE__, reason} <- GenServer.call(server, message, 30000) do
+      exit({reason, {__MODULE__, :call, [server, message, 30000]}})
     end
   end
 
