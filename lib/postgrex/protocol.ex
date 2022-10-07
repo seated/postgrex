@@ -66,11 +66,9 @@ defmodule Postgrex.Protocol do
           {:ok, state}
           | {:error, Postgrex.Error.t() | %DBConnection.ConnectionError{}}
   def connect(opts) do
-    sleep_for = Enum.random(1000..60_000)
+    sleep_for = Enum.random(1000..30_000)
 
-    Logger.info(
-      "[Postgrex.Protocol] (#{inspect(self())}) Connect/1 (sleep: #{sleep_for}) - opts: #{inspect(opts)}"
-    )
+    Logger.info("[Postgrex.Protocol] (#{inspect(self())}) Connect/1 (sleep: #{sleep_for})")
 
     Process.sleep(sleep_for)
 
